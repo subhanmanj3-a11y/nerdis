@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Neardis Business Dashboard — Manage your deals, analytics and business profile." />
+  <meta name="theme-color" content="#ff2d55" />
+  <link rel="manifest" href="/client/manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <title>Dashboard — Neardis</title>
+  <link rel="stylesheet" href="/client/css/global.css" />
+  <link rel="stylesheet" href="/client/css/dashboard.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div id="header-slot"></div>
+  <div id="sidebar-slot"></div>
+
+  <main class="main-content" id="main-content">
+    <div class="container page-padding">
+
+      <!-- ── Dashboard Header ────────────────────────────────────────── -->
+      <div class="dash-header animate-fade-in">
+        <div class="dash-header__left">
+          <div class="dash-header__avatar" id="dash-avatar">🏪</div>
+          <div>
+            <h1 class="dash-header__title" id="dash-business-name">Your Business</h1>
+            <div class="dash-header__meta" id="dash-business-meta"></div>
+          </div>
+        </div>
+        <div class="dash-header__right">
+          <button class="btn btn--ghost btn--sm" id="edit-profile-btn">✏️ Edit Profile</button>
+          <button class="btn btn--primary" id="new-deal-btn">+ New Deal</button>
+        </div>
+      </div>
+
+      <!-- ── Tab Navigation ──────────────────────────────────────────── -->
+      <div class="dash-tabs animate-fade-in" id="dash-tabs">
+        <button class="dash-tab dash-tab--active" data-tab="overview">📊 Overview</button>
+        <button class="dash-tab" data-tab="deals">🔥 Deals</button>
+        <button class="dash-tab" data-tab="analytics">📈 Analytics</button>
+        <button class="dash-tab" data-tab="profile">🏪 Profile</button>
+        <button class="dash-tab" data-tab="billing">💳 Billing</button>
+      </div>
+
+      <!-- ── TAB: Overview ───────────────────────────────────────────── -->
+      <div class="dash-tab-content" id="tab-overview">
+
+        <!-- Stat Cards -->
+        <div class="dash-stats-grid" id="dash-stats-grid">
+          <div class="dash-stat-card">
+            <div class="dash-stat-card__icon">👁️</div>
+            <div class="dash-stat-card__value" id="stat-views">—</div>
+            <div class="dash-stat-card__label">Total Views</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-card__icon">🖱️</div>
+            <div class="dash-stat-card__value" id="stat-clicks">—</div>
+            <div class="dash-stat-card__label">Total Clicks</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-card__icon">🔥</div>
+            <div class="dash-stat-card__value" id="stat-deals">—</div>
+            <div class="dash-stat-card__label">Active Deals</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-card__icon">⭐</div>
+            <div class="dash-stat-card__value" id="stat-rating">—</div>
+            <div class="dash-stat-card__label">Avg Rating</div>
+          </div>
+        </div>
+
+        <!-- Top Deals -->
+        <div class="dash-section">
+          <div class="section-header">
+            <h2 class="dash-section__title">🏆 Top Performing Deals</h2>
+            <button class="btn btn--ghost btn--sm" onclick="Dashboard.switchTab('deals')">View All</button>
+          </div>
+          <div id="top-deals-list"></div>
+        </div>
+
+        <!-- Live Occupancy -->
+        <div class="dash-section">
+          <div class="section-header">
+            <h2 class="dash-section__title">🔴 Live Occupancy</h2>
+          </div>
+          <div class="occupancy-control" id="occupancy-control">
+            <label class="toggle">
+              <input type="checkbox" class="toggle__input" id="occupancy-toggle" />
+              <span class="toggle__track"></span>
+              <span class="toggle__label">Enable Live Status</span>
+            </label>
+            <div class="occupancy-level-btns" id="occupancy-level-btns">
+              <button class="occ-btn" data-level="low">🟢 Low</button>
+              <button class="occ-btn" data-level="medium">🟡 Medium</button>
+              <button class="occ-btn" data-level="high">🔴 High</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── TAB: Deals ──────────────────────────────────────────────── -->
+      <div class="dash-tab-content hidden" id="tab-deals">
+
+        <div class="dash-deals-header">
+          <div class="tabs" id="deals-status-tabs">
+            <button class="tab tab--active" data-status="">All</button>
+            <button class="tab" data-status="active">Active</button>
+            <button class="tab" data-status="pending">Pending</button>
+            <button class="tab" data-status="expired">Expired</button>
+          </div>
+          <button class="btn btn--primary btn--sm" id="new-deal-btn-2">+ New Deal</button>
+        </div>
+
+        <div class="dash-deals-list" id="dash-deals-list">
+          <div class="flex items-center gap-3" style="padding:1.5rem 0">
+            <div class="spinner"></div><span>Loading deals…</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── TAB: Analytics ─────────────────────────────────────────── -->
+      <div class="dash-tab-content hidden" id="tab-analytics">
+        <div class="dash-section">
+          <h2 class="dash-section__title">📈 Views by Hour</h2>
+          <div class="chart-wrap" id="hourly-chart-wrap">
+            <canvas id="hourly-chart" height="200"></canvas>
+          </div>
+        </div>
+        <div class="dash-analytics-grid">
+          <div class="dash-section">
+            <h2 class="dash-section__title">🗓️ Recent Activity</h2>
+            <div id="recent-deals-list"></div>
+          </div>
+          <div class="dash-section">
+            <h2 class="dash-section__title">💰 Revenue Summary</h2>
+            <div id="revenue-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Profile ────────────────────────────────────────────── -->
+      <div class="dash-tab-content hidden" id="tab-profile">
+        <div class="dash-section">
+          <h2 class="dash-section__title">🏪 Business Profile</h2>
+          <form class="profile-form" id="profile-form">
+
+            <div class="profile-form__logo-row">
+              <div class="profile-form__logo-wrap">
+                <img id="logo-preview" src="" alt="Logo" class="profile-form__logo-img" />
+                <label class="profile-form__logo-upload" for="logo-upload">
+                  📷 Change Logo
+                  <input type="file" id="logo-upload" accept="image/*" class="hidden" />
+                </label>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label form-label--required">Business Name</label>
+                <input type="text" class="form-input" id="pf-name" placeholder="My Business" />
+              </div>
+              <div class="form-group">
+                <label class="form-label form-label--required">Category</label>
+                <select class="form-select" id="pf-category">
+                  <option value="Food">🍔 Food</option>
+                  <option value="Clothes">👗 Clothes</option>
+                  <option value="Cosmetics">💄 Cosmetics</option>
+                  <option value="Electronics">📱 Electronics</option>
+                  <option value="Health">💊 Health</option>
+                  <option value="Services">🔧 Services</option>
+                  <option value="Others">🎁 Others</option>
+                </select>
+              </div>
+              <div class="form-group" style="grid-column:1/-1">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" id="pf-description" rows="3" placeholder="Tell customers about your business…"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-input" id="pf-phone" placeholder="+92 300 1234567" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Website</label>
+                <input type="url" class="form-input" id="pf-website" placeholder="https://mybusiness.com" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" class="form-input" id="pf-city" placeholder="Lahore" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Street Address</label>
+                <input type="text" class="form-input" id="pf-street" placeholder="123 Main Street" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Instagram</label>
+                <input type="url" class="form-input" id="pf-instagram" placeholder="https://instagram.com/..." />
+              </div>
+              <div class="form-group">
+                <label class="form-label">WhatsApp</label>
+                <input type="text" class="form-input" id="pf-whatsapp" placeholder="+923001234567" />
+              </div>
+            </div>
+
+            <div class="profile-form__actions">
+              <button type="button" class="btn btn--primary" id="save-profile-btn">💾 Save Changes</button>
+              <button type="button" class="btn btn--ghost" id="verify-btn">🔒 Request Verification</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- ── TAB: Billing ────────────────────────────────────────────── -->
+      <div class="dash-tab-content hidden" id="tab-billing">
+        <div class="dash-section">
+          <h2 class="dash-section__title">💳 Subscription</h2>
+          <div id="current-plan-card"></div>
+          <div class="plan-cards-grid" id="plan-cards-grid">
+            <div class="flex items-center gap-3" style="padding:1rem 0">
+              <div class="spinner"></div><span>Loading plans…</span>
+            </div>
+          </div>
+        </div>
+        <div class="dash-section">
+          <h2 class="dash-section__title">🧾 Payment History</h2>
+          <div id="payment-history-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+  </main>
+
+  <div id="bottom-nav-slot"></div>
+</div>
+
+<!-- New Deal Modal -->
+<div class="modal-overlay" id="new-deal-modal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal__header">
+      <h3 class="modal__title">🔥 Post New Deal</h3>
+      <button class="modal__close" id="new-deal-modal-close">✕</button>
+    </div>
+    <form id="new-deal-form" class="new-deal-form">
+
+      <div class="form-group">
+        <label class="form-label form-label--required">Deal Title</label>
+        <input type="text" class="form-input" id="nd-title" placeholder="e.g. 50% off on all burgers today!" maxlength="120" />
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label form-label--required">Category</label>
+          <select class="form-select" id="nd-category">
+            <option value="">Select category</option>
+            <option value="Food">🍔 Food</option>
+            <option value="Clothes">👗 Clothes</option>
+            <option value="Cosmetics">💄 Cosmetics</option>
+            <option value="Electronics">📱 Electronics</option>
+            <option value="Health">💊 Health</option>
+            <option value="Services">🔧 Services</option>
+            <option value="Others">🎁 Others</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Discount %</label>
+          <input type="number" class="form-input" id="nd-discount" min="1" max="100" placeholder="e.g. 30" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Price</label>
+          <input type="number" class="form-input" id="nd-original-price" min="0" placeholder="PKR" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discounted Price</label>
+          <input type="number" class="form-input" id="nd-discounted-price" min="0" placeholder="PKR" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="nd-description" rows="2" placeholder="Tell customers about this deal…" maxlength="1000"></textarea>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label form-label--required">Deal Type</label>
+          <select class="form-select" id="nd-deal-type">
+            <option value="local">📍 Local Only</option>
+            <option value="online">🌐 Online Only</option>
+            <option value="both">🌍 Both</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label form-label--required">Expires At</label>
+          <input type="datetime-local" class="form-input" id="nd-expires" />
+        </div>
+      </div>
+
+      <div class="form-group" id="coupon-field">
+        <label class="form-label">Coupon Code (optional)</label>
+        <input type="text" class="form-input" id="nd-coupon" placeholder="e.g. SAVE30" maxlength="30" />
+      </div>
+
+      <div class="form-group" id="link-field">
+        <label class="form-label">External Link (for online deals)</label>
+        <input type="url" class="form-input" id="nd-link" placeholder="https://..." />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deal Images (up to 5)</label>
+        <div class="image-upload-area" id="image-upload-area">
+          <input type="file" id="nd-images" accept="image/*" multiple class="hidden" />
+          <label for="nd-images" class="image-upload-label">
+            <span class="image-upload-icon">📷</span>
+            <span>Click to upload images</span>
+            <span class="text-sm text-muted">JPG, PNG, WEBP — max 5MB each</span>
+          </label>
+          <div class="image-previews" id="image-previews"></div>
+        </div>
+      </div>
+
+      <div class="form-toggles-row">
+        <label class="toggle">
+          <input type="checkbox" class="toggle__input" id="nd-flash" />
+          <span class="toggle__track"></span>
+          <span class="toggle__label">⚡ Flash Deal</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" class="toggle__input" id="nd-limited" />
+          <span class="toggle__track"></span>
+          <span class="toggle__label">⚠️ Limited Stock</span>
+        </label>
+      </div>
+
+      <div class="form-group hidden" id="stock-count-field">
+        <label class="form-label">Stock Count</label>
+        <input type="number" class="form-input" id="nd-stock" min="1" placeholder="e.g. 50" />
+      </div>
+
+      <div class="new-deal-form__actions">
+        <button type="button" class="btn btn--primary btn--full" id="submit-deal-btn">Submit Deal for Review</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/client/js/api.js"></script>
+<script src="/client/js/timer.js"></script>
+<script src="/client/js/global.js"></script>
+<script src="/client/js/dashboard.js"></script>
+</body>
+</html>

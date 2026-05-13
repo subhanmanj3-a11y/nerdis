@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"  content="Deal details — Neardis" id="meta-description" />
+  <meta property="og:title" content="Deal — Neardis"            id="og-title" />
+  <meta property="og:description" content=""                    id="og-description" />
+  <meta property="og:image"       content=""                    id="og-image" />
+  <meta property="og:type"        content="article" />
+  <meta name="theme-color"        content="#ff2d55" />
+  <link rel="manifest" href="/client/manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <title>Deal — Neardis</title>
+
+  <link rel="stylesheet" href="/client/css/global.css" />
+  <link rel="stylesheet" href="/client/css/deal.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Header -->
+  <div id="header-slot"></div>
+  <!-- Sidebar -->
+  <div id="sidebar-slot"></div>
+
+  <main class="main-content" id="main-content">
+    <div class="container page-padding">
+
+      <!-- Back Button -->
+      <button class="back-btn" onclick="history.back()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Back
+      </button>
+
+      <!-- ── Deal Skeleton (shown while loading) ──────────────────── -->
+      <div id="deal-skeleton" class="deal-skeleton-wrap">
+        <div class="skeleton" style="height:420px;border-radius:20px;margin-bottom:1.5rem"></div>
+        <div class="skeleton" style="height:28px;width:60%;margin-bottom:0.75rem"></div>
+        <div class="skeleton" style="height:16px;width:40%;margin-bottom:1.5rem"></div>
+        <div class="skeleton" style="height:100px;border-radius:14px"></div>
+      </div>
+
+      <!-- ── Deal Content (hidden until loaded) ──────────────────── -->
+      <div id="deal-content" class="hidden">
+
+        <!-- Images Gallery -->
+        <div class="deal-gallery" id="deal-gallery">
+          <div class="deal-gallery__main">
+            <img id="gallery-main" src="" alt="" class="deal-gallery__main-img" />
+            <div class="deal-gallery__badges" id="gallery-badges"></div>
+          </div>
+          <div class="deal-gallery__thumbs" id="gallery-thumbs"></div>
+        </div>
+
+        <!-- Deal Header -->
+        <div class="deal-header">
+          <div class="deal-header__top">
+            <div>
+              <div class="deal-header__badges" id="deal-badges"></div>
+              <h1 class="deal-header__title" id="deal-title"></h1>
+            </div>
+            <div class="deal-header__actions">
+              <button class="icon-action-btn" id="bookmark-btn" aria-label="Bookmark">🔖</button>
+              <button class="icon-action-btn" id="share-btn"    aria-label="Share">↗️</button>
+            </div>
+          </div>
+
+          <!-- Price Row -->
+          <div class="deal-price-row" id="deal-price-row"></div>
+
+          <!-- Meta Row -->
+          <div class="deal-meta-row" id="deal-meta-row"></div>
+        </div>
+
+        <!-- Expiry Countdown -->
+        <div class="deal-countdown-card" id="deal-countdown-card">
+          <div class="deal-countdown__label">⏰ Offer expires in</div>
+          <div class="deal-countdown__timer" id="deal-countdown-timer" data-expires=""></div>
+          <div class="deal-countdown__date"  id="deal-countdown-date"></div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="deal-cta-row" id="deal-cta-row"></div>
+
+        <!-- Coupon Code (online deals) -->
+        <div class="deal-coupon-card hidden" id="deal-coupon-card">
+          <p class="deal-coupon__label">🏷️ Coupon Code</p>
+          <div class="deal-coupon__code-wrap">
+            <span class="deal-coupon__code" id="deal-coupon-code"></span>
+            <button class="btn btn--outline-red btn--sm" id="copy-coupon-btn">Copy</button>
+          </div>
+          <p class="deal-coupon__hint">Apply at checkout to get your discount</p>
+        </div>
+
+        <!-- Description -->
+        <div class="deal-section" id="deal-desc-section">
+          <h2 class="deal-section__title">About This Deal</h2>
+          <p class="deal-description" id="deal-description"></p>
+        </div>
+
+        <!-- Shop Info -->
+        <div class="deal-section">
+          <h2 class="deal-section__title">Shop Details</h2>
+          <div class="deal-shop-card" id="deal-shop-card"></div>
+        </div>
+
+        <!-- Worth It? Voting -->
+        <div class="deal-section">
+          <h2 class="deal-section__title">Worth It? 🤔</h2>
+          <div class="deal-worthit" id="deal-worthit">
+            <div class="deal-worthit__score" id="worthit-score">
+              <div class="deal-worthit__bar" id="worthit-bar"></div>
+              <span id="worthit-percent">0%</span> say it's worth it
+            </div>
+            <div class="deal-worthit__btns" id="worthit-btns">
+              <button class="btn btn--success" id="worthit-yes">👍 Worth It</button>
+              <button class="btn btn--danger"  id="worthit-no">👎 Not Worth It</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Sightings -->
+        <div class="deal-section">
+          <h2 class="deal-section__title">Still Available? 👀</h2>
+          <div class="deal-sightings" id="deal-sightings">
+            <div class="deal-sightings__status" id="sightings-status"></div>
+            <button class="btn btn--ghost btn--sm" id="report-sighting-btn">
+              📍 I See It! Report Sighting
+            </button>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="deal-section">
+          <div class="section-header">
+            <h2 class="deal-section__title">Reviews</h2>
+            <button class="btn btn--outline-red btn--sm" id="write-review-btn">
+              ✍️ Write Review
+            </button>
+          </div>
+
+          <!-- Review Form (hidden by default) -->
+          <div class="review-form hidden" id="review-form">
+            <div class="review-form__stars" id="review-stars">
+              <span data-val="1">⭐</span>
+              <span data-val="2">⭐</span>
+              <span data-val="3">⭐</span>
+              <span data-val="4">⭐</span>
+              <span data-val="5">⭐</span>
+            </div>
+            <textarea
+              class="form-textarea"
+              id="review-comment"
+              placeholder="Share your experience with this deal…"
+              rows="3"
+            ></textarea>
+            <div class="review-form__worthit">
+              <span>Worth it?</span>
+              <button class="pill" id="worthit-vote-yes" data-vote="true">👍 Yes</button>
+              <button class="pill" id="worthit-vote-no"  data-vote="false">👎 No</button>
+            </div>
+            <div class="review-form__actions">
+              <button class="btn btn--primary" id="submit-review-btn">Submit Review</button>
+              <button class="btn btn--ghost"   id="cancel-review-btn">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Reviews List -->
+          <div class="reviews-list" id="reviews-list">
+            <div class="flex items-center gap-3" style="padding:1rem 0">
+              <div class="spinner"></div>
+              <span>Loading reviews…</span>
+            </div>
+          </div>
+
+          <div class="load-more-wrap" id="reviews-load-more" style="display:none">
+            <button class="btn btn--ghost btn--sm" id="load-more-reviews-btn">Load More Reviews</button>
+          </div>
+        </div>
+
+      </div><!-- /deal-content -->
+
+      <!-- Error State -->
+      <div class="empty-state hidden" id="deal-error">
+        <div class="empty-state__icon">😕</div>
+        <h3 class="empty-state__title">Deal not found</h3>
+        <p class="empty-state__text">This deal may have expired or been removed.</p>
+        <a href="/client/index.html" class="btn btn--primary mt-4">Browse Deals</a>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="bottom-nav-slot"></div>
+</div>
+
+<script src="/client/js/api.js"></script>
+<script src="/client/js/haversine.js"></script>
+<script src="/client/js/timer.js"></script>
+<script src="/client/js/global.js"></script>
+<script src="/client/js/deal.js"></script>
+</body>
+</html>

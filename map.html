@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Neardis Map — Find deals near you on an interactive map with clustering and heatmap." />
+  <meta name="theme-color" content="#ff2d55" />
+  <link rel="manifest" href="/client/manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <title>Neardis — Deal Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="/client/css/global.css" />
+  <link rel="stylesheet" href="/client/css/map.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Header Slot -->
+  <div id="header-slot"></div>
+
+  <!-- Sidebar Slot -->
+  <div id="sidebar-slot"></div>
+
+  <!-- Main Content -->
+  <main class="main-content map-main" id="main-content">
+
+    <!-- ── Map Controls Overlay ────────────────────────────────────── -->
+    <div class="map-controls" id="map-controls">
+
+      <!-- Radius Selector -->
+      <div class="map-control-group">
+        <label class="map-control-label">Radius</label>
+        <div class="tabs tabs--compact" id="radius-tabs">
+          <button class="tab" data-radius="1000">1km</button>
+          <button class="tab" data-radius="3000">3km</button>
+          <button class="tab tab--active" data-radius="5000">5km</button>
+          <button class="tab" data-radius="10000">10km</button>
+          <button class="tab" data-radius="25000">25km</button>
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="map-control-group">
+        <label class="map-control-label">Category</label>
+        <select class="form-select form-select--compact" id="map-category">
+          <option value="">All Categories</option>
+          <option value="Food">🍔 Food</option>
+          <option value="Clothes">👗 Clothes</option>
+          <option value="Cosmetics">💄 Cosmetics</option>
+          <option value="Electronics">📱 Electronics</option>
+          <option value="Health">💊 Health</option>
+          <option value="Others">🎁 Others</option>
+        </select>
+      </div>
+
+      <!-- View Toggles -->
+      <div class="map-control-group">
+        <label class="map-control-label">View</label>
+        <div class="map-view-toggles">
+          <button class="map-toggle-btn map-toggle-btn--active" id="toggle-clusters" title="Clustered Markers">
+            🔵 Clusters
+          </button>
+          <button class="map-toggle-btn" id="toggle-heatmap" title="Deal Density Heatmap">
+            🔥 Heatmap
+          </button>
+        </div>
+      </div>
+
+      <!-- Locate Me -->
+      <button class="btn btn--primary btn--sm" id="locate-me-btn">
+        📍 My Location
+      </button>
+
+    </div>
+
+    <!-- ── Map Container ───────────────────────────────────────────── -->
+    <div id="map-container"></div>
+
+    <!-- ── Deal Count Badge ────────────────────────────────────────── -->
+    <div class="map-deal-count" id="map-deal-count">
+      <div class="spinner spinner--sm" id="map-spinner"></div>
+      <span id="map-count-text">Loading deals…</span>
+    </div>
+
+    <!-- ── Deal Sidebar Panel ──────────────────────────────────────── -->
+    <div class="map-panel" id="map-panel">
+      <div class="map-panel__header">
+        <h3 class="map-panel__title" id="map-panel-title">Nearby Deals</h3>
+        <button class="map-panel__close" id="map-panel-close">✕</button>
+      </div>
+      <div class="map-panel__body" id="map-panel-body">
+        <!-- Deal cards rendered here -->
+      </div>
+    </div>
+
+    <!-- ── Deal Popup (click marker) ──────────────────────────────── -->
+    <!-- Leaflet popups rendered dynamically -->
+
+  </main>
+
+  <!-- Bottom Nav Slot -->
+  <div id="bottom-nav-slot"></div>
+
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet-heat@0.2.0/dist/leaflet-heat.js"></script>
+
+<!-- App Scripts -->
+<script src="/client/js/api.js"></script>
+<script src="/client/js/haversine.js"></script>
+<script src="/client/js/timer.js"></script>
+<script src="/client/js/global.js"></script>
+<script src="/client/js/map.js"></script>
+</body>
+</html>

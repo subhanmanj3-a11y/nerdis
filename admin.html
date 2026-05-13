@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#ff2d55" />
+  <link rel="manifest" href="/client/manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" />
+  <title>Admin Panel — Neardis</title>
+  <link rel="stylesheet" href="/client/css/global.css" />
+  <link rel="stylesheet" href="/client/css/admin.css" />
+</head>
+<body>
+<div class="app-shell">
+  <div id="header-slot"></div>
+  <div id="sidebar-slot"></div>
+
+  <main class="main-content" id="main-content">
+    <div class="container page-padding">
+
+      <div class="admin-header animate-fade-in">
+        <div>
+          <h1 class="admin-header__title">🛡️ Admin Panel</h1>
+          <p class="admin-header__sub">Manage deals, users, businesses and reviews</p>
+        </div>
+        <button class="btn btn--ghost btn--sm" id="refresh-btn">🔄 Refresh</button>
+      </div>
+
+      <div class="dash-tabs animate-fade-in" id="admin-tabs">
+        <button class="dash-tab dash-tab--active" data-tab="overview">📊 Overview</button>
+        <button class="dash-tab" data-tab="deals">🔥 Deals</button>
+        <button class="dash-tab" data-tab="users">👤 Users</button>
+        <button class="dash-tab" data-tab="businesses">🏪 Businesses</button>
+        <button class="dash-tab" data-tab="reviews">💬 Reviews</button>
+        <button class="dash-tab" data-tab="payments">💳 Payments</button>
+      </div>
+
+      <!-- Overview Tab -->
+      <div class="admin-tab-content" id="tab-overview">
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">👤</div><div class="admin-stat-card__value" id="s-users">—</div><div class="admin-stat-card__label">Total Users</div><div class="admin-stat-card__sub" id="s-users-new">— new this month</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">🏪</div><div class="admin-stat-card__value" id="s-businesses">—</div><div class="admin-stat-card__label">Businesses</div><div class="admin-stat-card__sub" id="s-pending-verify">— pending</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">🔥</div><div class="admin-stat-card__value" id="s-deals">—</div><div class="admin-stat-card__label">Total Deals</div><div class="admin-stat-card__sub" id="s-active-deals">— active</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">⏳</div><div class="admin-stat-card__value admin-stat-card__value--warn" id="s-pending">—</div><div class="admin-stat-card__label">Pending Approval</div><div class="admin-stat-card__sub">Needs review</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">🚩</div><div class="admin-stat-card__value admin-stat-card__value--warn" id="s-flagged">—</div><div class="admin-stat-card__label">Flagged Reviews</div><div class="admin-stat-card__sub">Needs moderation</div></div>
+          <div class="admin-stat-card"><div class="admin-stat-card__icon">💰</div><div class="admin-stat-card__value admin-stat-card__value--green" id="s-revenue">—</div><div class="admin-stat-card__label">Total Revenue</div><div class="admin-stat-card__sub">All time</div></div>
+        </div>
+        <div class="admin-section">
+          <h2 class="admin-section__title">📊 Deals by Category</h2>
+          <div class="category-breakdown" id="category-breakdown"></div>
+        </div>
+      </div>
+
+      <!-- Deals Tab -->
+      <div class="admin-tab-content hidden" id="tab-deals">
+        <div class="admin-table-controls">
+          <div class="tabs" id="deal-status-filter">
+            <button class="tab tab--active" data-status="">All</button>
+            <button class="tab" data-status="pending">⏳ Pending</button>
+            <button class="tab" data-status="active">✅ Active</button>
+            <button class="tab" data-status="rejected">❌ Rejected</button>
+            <button class="tab" data-status="expired">⏰ Expired</button>
+          </div>
+          <input type="text" class="form-input admin-search" id="deal-search" placeholder="🔍 Search deals…" />
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Deal</th><th>Business</th><th>Category</th><th>Discount</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
+            <tbody id="deals-tbody"><tr><td colspan="7" class="admin-table__loading"><div class="spinner"></div> Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="admin-pagination" id="deals-pagination"></div>
+      </div>
+
+      <!-- Users Tab -->
+      <div class="admin-tab-content hidden" id="tab-users">
+        <div class="admin-table-controls">
+          <div class="tabs" id="user-role-filter">
+            <button class="tab tab--active" data-role="">All</button>
+            <button class="tab" data-role="user">👤 Users</button>
+            <button class="tab" data-role="business">🏪 Business</button>
+            <button class="tab" data-role="admin">🛡️ Admin</button>
+          </div>
+          <input type="text" class="form-input admin-search" id="user-search" placeholder="🔍 Search users…" />
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Role</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="users-tbody"><tr><td colspan="5" class="admin-table__loading"><div class="spinner"></div> Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="admin-pagination" id="users-pagination"></div>
+      </div>
+
+      <!-- Businesses Tab -->
+      <div class="admin-tab-content hidden" id="tab-businesses">
+        <div class="admin-table-controls">
+          <div class="tabs" id="biz-verify-filter">
+            <button class="tab tab--active" data-status="">All</button>
+            <button class="tab" data-status="pending">⏳ Pending</button>
+            <button class="tab" data-status="approved">✅ Verified</button>
+            <button class="tab" data-status="rejected">❌ Rejected</button>
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Business</th><th>Owner</th><th>Category</th><th>Plan</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="businesses-tbody"><tr><td colspan="6" class="admin-table__loading"><div class="spinner"></div> Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="admin-pagination" id="businesses-pagination"></div>
+      </div>
+
+      <!-- Reviews Tab -->
+      <div class="admin-tab-content hidden" id="tab-reviews">
+        <div class="admin-section">
+          <h2 class="admin-section__title">🚩 Flagged Reviews</h2>
+          <div id="flagged-reviews-list">
+            <div class="flex items-center gap-3" style="padding:1rem 0"><div class="spinner"></div><span>Loading…</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payments Tab -->
+      <div class="admin-tab-content hidden" id="tab-payments">
+        <div class="admin-table-controls">
+          <div class="tabs" id="payment-status-filter">
+            <button class="tab tab--active" data-status="">All</button>
+            <button class="tab" data-status="completed">✅ Completed</button>
+            <button class="tab" data-status="pending">⏳ Pending</button>
+            <button class="tab" data-status="failed">❌ Failed</button>
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Business</th><th>Type</th><th>Plan</th><th>Amount</th><th>Gateway</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="payments-tbody"><tr><td colspan="7" class="admin-table__loading"><div class="spinner"></div> Loading…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="admin-pagination" id="payments-pagination"></div>
+      </div>
+
+    </div>
+  </main>
+  <div id="bottom-nav-slot"></div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal__header">
+      <h3 class="modal__title" id="confirm-modal-title">Confirm Action</h3>
+      <button class="modal__close" id="confirm-modal-close">✕</button>
+    </div>
+    <p class="confirm-modal-message" id="confirm-modal-message" style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1rem"></p>
+    <div class="form-group hidden" id="confirm-reason-group">
+      <label class="form-label">Reason (optional)</label>
+      <input type="text" class="form-input" id="confirm-reason" placeholder="Enter reason…" />
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-top:1.25rem">
+      <button class="btn btn--danger btn--full" id="confirm-yes-btn">Confirm</button>
+      <button class="btn btn--ghost btn--full" id="confirm-no-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="/client/js/api.js"></script>
+<script src="/client/js/global.js"></script>
+<script src="/client/js/admin.js"></script>
+</body>
+</html>
