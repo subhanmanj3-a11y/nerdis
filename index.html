@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Neardis — Discover the best hyperlocal and online deals near you. Flash deals, discount offers, and more." />
+  <meta property="og:title"       content="Neardis — Deal Discovery Platform" />
+  <meta property="og:description" content="Find the hottest deals near you or anywhere online." />
+  <meta property="og:image"       content="/client/assets/og-image.png" />
+  <meta property="og:type"        content="website" />
+  <meta name="theme-color"        content="#ff2d55" />
+  <link rel="manifest"            href="/client/manifest.json" />
+  <link rel="icon"                href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>" />
+  <title>Neardis — Discover Deals Near You</title>
+
+  <link rel="stylesheet" href="/client/css/global.css" />
+  <link rel="stylesheet" href="/client/css/index.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- Header Slot -->
+  <div id="header-slot"></div>
+
+  <!-- Sidebar Slot -->
+  <div id="sidebar-slot"></div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content">
+    <div class="container page-padding">
+
+      <!-- ── Hero / Location Bar ─────────────────────────────────────── -->
+      <section class="location-bar animate-fade-in" id="location-bar">
+        <div class="location-bar__info">
+          <span class="location-bar__icon">📍</span>
+          <div>
+            <span class="location-bar__label">Showing deals near</span>
+            <span class="location-bar__value" id="location-label">Detecting location…</span>
+          </div>
+        </div>
+        <div class="location-bar__actions">
+          <button class="btn btn--ghost btn--sm" id="refresh-location-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
+            </svg>
+            Refresh
+          </button>
+          <button class="btn btn--outline-red btn--sm" id="surprise-btn">
+            🎲 Surprise Me
+          </button>
+        </div>
+      </section>
+
+      <!-- ── Flash Deals ─────────────────────────────────────────────── -->
+      <section class="feed-section" id="flash-section">
+        <div class="section-header">
+          <h2 class="section-header__title">
+            <span class="flash-icon">⚡</span> Flash Deals
+          </h2>
+          <a href="/client/pages/category.html?filter=flash" class="section-header__link">See all →</a>
+        </div>
+        <div class="flash-scroll" id="flash-scroll">
+          <!-- Flash deal cards injected by JS -->
+          <div class="flash-skeleton-row" id="flash-skeleton">
+            <div class="flash-card-skeleton"><div class="skeleton" style="height:160px;border-radius:14px"></div><div class="skeleton mt-2" style="height:14px;width:70%"></div><div class="skeleton mt-1" style="height:12px;width:40%"></div></div>
+            <div class="flash-card-skeleton"><div class="skeleton" style="height:160px;border-radius:14px"></div><div class="skeleton mt-2" style="height:14px;width:70%"></div><div class="skeleton mt-1" style="height:12px;width:40%"></div></div>
+            <div class="flash-card-skeleton"><div class="skeleton" style="height:160px;border-radius:14px"></div><div class="skeleton mt-2" style="height:14px;width:70%"></div><div class="skeleton mt-1" style="height:12px;width:40%"></div></div>
+            <div class="flash-card-skeleton"><div class="skeleton" style="height:160px;border-radius:14px"></div><div class="skeleton mt-2" style="height:14px;width:70%"></div><div class="skeleton mt-1" style="height:12px;width:40%"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Filters & Sort ──────────────────────────────────────────── -->
+      <section class="feed-controls animate-fade-in">
+        <div class="filter-pills" id="category-filters">
+          <button class="pill pill--active" data-category="">All</button>
+          <button class="pill" data-category="Food">🍔 Food</button>
+          <button class="pill" data-category="Clothes">👗 Clothes</button>
+          <button class="pill" data-category="Cosmetics">💄 Cosmetics</button>
+          <button class="pill" data-category="Electronics">📱 Electronics</button>
+          <button class="pill" data-category="Health">💊 Health</button>
+          <button class="pill" data-category="Others">🎁 Others</button>
+        </div>
+
+        <div class="feed-sort">
+          <span class="feed-sort__label">Sort:</span>
+          <div class="tabs" id="sort-tabs">
+            <button class="tab tab--active" data-sort="">Newest</button>
+            <button class="tab" data-sort="popular">Popular</button>
+            <button class="tab" data-sort="discount">Discount</button>
+            <button class="tab" data-sort="expiring">Expiring</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Main Deal Feed ──────────────────────────────────────────── -->
+      <section class="feed-section">
+        <div class="section-header">
+          <h2 class="section-header__title" id="feed-title">
+            🏠 Nearby Deals
+          </h2>
+          <div class="feed-view-toggle">
+            <button class="view-btn view-btn--active" id="view-grid" aria-label="Grid view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </button>
+            <button class="view-btn" id="view-list" aria-label="List view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Deal Grid -->
+        <div class="deals-grid stagger" id="deals-grid">
+          <!-- JS fills this with skeletons then real cards -->
+        </div>
+
+        <!-- Load More / Infinite Scroll Trigger -->
+        <div class="load-more-wrap" id="load-more-wrap">
+          <div class="load-more-spinner" id="load-more-spinner" style="display:none">
+            <div class="spinner"></div>
+            <span>Loading more deals…</span>
+          </div>
+          <div id="infinite-scroll-trigger" style="height:1px"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="empty-state">
+          <div class="empty-state__icon">🔍</div>
+          <h3 class="empty-state__title">No deals found</h3>
+          <p class="empty-state__text">Try changing your filters or expanding your search area.</p>
+          <button class="btn btn--primary mt-4" onclick="Feed.reset()">Reset Filters</button>
+        </div>
+      </section>
+
+    </div><!-- /container -->
+  </main><!-- /main-content -->
+
+  <!-- Bottom Nav Slot -->
+  <div id="bottom-nav-slot"></div>
+
+</div><!-- /app-shell -->
+
+<!-- Surprise Me Modal -->
+<div class="modal-overlay" id="surprise-modal">
+  <div class="modal">
+    <div class="modal__header">
+      <h3 class="modal__title">🎲 Surprise Deal!</h3>
+      <button class="modal__close" id="surprise-modal-close">✕</button>
+    </div>
+    <div id="surprise-modal-body">
+      <div class="flex items-center gap-3" style="padding:1rem 0">
+        <div class="spinner spinner--lg"></div>
+        <span>Finding a random deal near you…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="/client/js/api.js"></script>
+<script src="/client/js/haversine.js"></script>
+<script src="/client/js/timer.js"></script>
+<script src="/client/js/global.js"></script>
+<script src="/client/js/index.js"></script>
+</body>
+</html>
